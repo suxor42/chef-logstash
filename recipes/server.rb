@@ -14,6 +14,7 @@ include_recipe 'logstash::default'
 include_recipe 'logrotate'
 
 include_recipe 'rabbitmq' if node['logstash']['install_rabbitmq']
+#include_recipe 'redis::single'
 
 if node['logstash']['install_zeromq']
   include_recipe 'logstash::zero_mq_repo'
@@ -170,7 +171,7 @@ services.each do |type|
   if node['logstash']['server']['init_method'] == 'runit'
     runit_service("logstash_#{type}")
   elsif node['logstash']['server']['init_method'] == 'native'
-    if platform_family? 'debian'
+    if platform_family? 'ubuntu'
       if node['platform_version'] >= '12.04'
         template "/etc/init/logstash_#{type}.conf" do
           mode '0644'
@@ -206,7 +207,7 @@ services.each do |type|
         action [:enable, :start]
       end
 
-    elsif platform_family? 'rhel', 'fedora'
+    elsif platform_family? 'rhel', 'fedora', 'debian'
       template "/etc/init.d/logstash_#{type}" do
         source "init.logstash_#{type}.erb"
         owner 'root'

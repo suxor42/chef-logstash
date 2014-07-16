@@ -18,7 +18,7 @@ end
 
 package 'git'
 
-basedir = node['logstash']['basedir'] + '/beaver'
+basedir = "#{node['logstash']['basedir']}/beaver"
 
 conf_file = "#{basedir}/etc/beaver.conf"
 format = node['logstash']['beaver']['format']
@@ -153,7 +153,7 @@ when 'rhel'
   use_upstart = true if node['platform_version'].to_i >= 6
 when 'fedora'
   use_upstart = true if node['platform_version'].to_i >= 9
-when 'debian'
+when 'ubuntu'
   use_upstart = true
   supports_setuid = true if node['platform_version'].to_f >= 12.04
 end
